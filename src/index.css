@@ -43,7 +43,7 @@
 .route-path-labels span{min-width:0;overflow-wrap:anywhere}
 .route-path-labels span:not(:first-child){text-align:center}.route-path-labels span:last-child{text-align:right}
 .route-path-name{margin-top:13px;color:#d9e6e3;font-size:11px;line-height:1.45}
-.route-settlement{display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:start;gap:11px}
+.route-settlement{grid-column:1/-1;display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:start;gap:11px}
 .settle-symbol{width:30px;height:30px;display:grid;place-items:center;border-radius:8px;background:rgba(68,199,176,.1);color:#9be0cc}
 .settle-copy{min-width:0;display:grid;gap:6px}
 .settle-copy strong{font-size:12px;line-height:1.35;font-weight:600;color:#e3eeeb}
@@ -278,22 +278,6 @@ body{font-size:16px}
 
 /* hero: keep the floating chip from covering the card footer text */
 @media(min-width:901px){.note-intent{left:-54px;bottom:64px}}
-
-/* hero chips: float outside the preview card corners */
-@media(min-width:1181px){
-  .note-settlement{right:-96px;top:38px}
-  .note-intent{left:-104px;bottom:52px}
-}
-
-/* dashboard: widen the path card on desktop, settlement spans full width below */
-@media(min-width:1181px){
-  .route-dashboard-grid{grid-template-columns:1.5fr 2.5fr 1fr}
-  .route-path-labels{justify-content:center}
-  .route-settlement{grid-column:1/-1}
-}
-@media(max-width:1180px){
-  .route-settlement{grid-column:1/-1}
-}
 
 /* logo placements */
 .brand-mark img,.product-footer .brand-mark img{width:24px;height:24px;object-fit:contain}
