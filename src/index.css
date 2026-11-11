@@ -412,3 +412,85 @@ body{font-size:16px}
 .tp-row .tp-info b{font-size:16px}
 .tp-price{font-size:13px;color:rgba(255,255,255,.6)}
 .tp-more,.tp-empty{margin:12px 0;font-size:13px;color:rgba(255,255,255,.6);text-align:center}
+
+/* ---- HD logo ---- */
+.brand .logo-mark{display:block;flex:none;filter:drop-shadow(0 0 14px rgba(68,199,176,.18))}
+@media(max-width:620px){.brand .logo-mark{width:30px;height:30px}}
+
+/* ---- Wallet popup: PC artwork ---- */
+.wm-art{display:none}
+@media(min-width:901px){
+  .tray-wallet{max-width:920px;padding:28px}
+  .wm-grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px;align-items:stretch}
+  .wm-art{display:block;border-radius:18px;overflow:hidden;min-height:520px}
+  .wm-art .wallet-art{min-height:100%;height:100%;border-radius:18px}
+}
+.live-section-label{margin:6px 0 -6px}
+
+/* ---- Live page ---- */
+.lv-main{width:min(520px,100% - 32px);margin:0 auto;padding:28px 0 calc(72px + env(safe-area-inset-bottom));display:grid;gap:12px}
+.lv-head{display:grid;gap:10px;margin-bottom:6px}
+.lv-badge{justify-self:start;display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;background:rgba(0,236,151,.1);border:1px solid rgba(0,236,151,.35);color:#7dffc8;font:600 12px/1 inherit;letter-spacing:.06em;text-transform:uppercase}
+.lv-badge i{width:7px;height:7px;border-radius:50%;background:#00ec97;box-shadow:0 0 10px #00ec97}
+.lv-head h1{margin:0;font:700 clamp(30px,8vw,42px)/1.08 var(--font-display);letter-spacing:-1.2px;color:#fff}
+.lv-head p{margin:0;font-size:15px;line-height:1.55;color:rgba(255,255,255,.7);max-width:42ch}
+.lv-card{display:grid;gap:12px;padding:16px;border-radius:20px;border:1px solid rgba(194,225,226,.14);background:linear-gradient(160deg,rgba(18,36,43,.9),rgba(10,22,28,.9))}
+.lv-card>*{min-width:0}
+.lv-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px;font-weight:600;color:rgba(255,255,255,.85)}
+.lv-muted{font-weight:500;font-size:13px;color:rgba(255,255,255,.55);text-align:right}
+.lv-amount-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.lv-amount-row input,.lv-out{flex:1;min-width:0;width:100%;border:0;outline:0;background:transparent;color:#fff;font:600 clamp(28px,8vw,36px)/1.1 var(--font-display);letter-spacing:-.8px;padding:0;overflow:hidden;text-overflow:ellipsis}
+.lv-amount-row input::placeholder,.lv-out.empty{color:rgba(255,255,255,.28)}
+.lv-out{display:block}
+.lv-pcts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.lv-pcts button{min-height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font:600 14px/1 inherit;cursor:pointer}
+.lv-pcts button:hover:not(:disabled){background:rgba(255,255,255,.1)}
+.lv-pcts button:disabled{opacity:.45;cursor:default}
+.lv-flip{justify-self:center;display:grid;place-items:center;width:38px;height:38px;margin:-20px 0;border-radius:12px;border:1px solid rgba(194,225,226,.2);background:#0f1d24;color:#fff;cursor:pointer;position:relative;z-index:2}
+.lv-flip:hover{background:#16282f}
+.lv-link{border:0;background:none;color:#7dffc8;font:600 13px/1 inherit;cursor:pointer;padding:4px 0}
+.lv-link:hover{text-decoration:underline}
+.lv-addr{width:100%;box-sizing:border-box;min-height:48px;padding:0 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:#0e171d;color:#fff;font:500 14px/1 ui-monospace,SFMono-Regular,monospace}
+.lv-addr:focus{outline:2px solid rgba(125,255,200,.6);outline-offset:1px}
+.lv-hint{margin:0;font-size:12.5px;line-height:1.45;color:rgba(255,255,255,.6)}
+.lv-hint.warn{color:#ffb4a6}
+.lv-self{display:flex;align-items:center;gap:12px}
+.lv-self-dot{flex:none;width:34px;height:34px;border-radius:50%;background:linear-gradient(140deg,#4fe0c4,#72d7ff)}
+.lv-self b{display:block;font-size:15px}
+.lv-self small{display:block;font-size:13px;color:rgba(255,255,255,.6);margin-top:2px}
+.lv-route-list{display:grid;gap:8px}
+.lv-route{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#fff;cursor:pointer;text-align:left}
+.lv-route.on{border-color:rgba(0,236,151,.6);background:rgba(0,236,151,.08)}
+.lv-route:disabled{opacity:.45;cursor:default}
+.lv-radio{flex:none;width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.35)}
+.lv-route.on .lv-radio{border-color:#00ec97;background:radial-gradient(circle,#00ec97 45%,transparent 50%)}
+.lv-route-copy{flex:1;min-width:0;display:grid;gap:3px}
+.lv-route-copy b{font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lv-route-copy em{font:600 10.5px/1 inherit;font-style:normal;padding:3px 7px;border-radius:999px;background:rgba(0,236,151,.16);color:#7dffc8;letter-spacing:.04em;text-transform:uppercase}
+.lv-route-copy small,.lv-route-num small{font-size:12px;color:rgba(255,255,255,.6);line-height:1.35}
+.lv-route-num{flex:none;max-width:44%;display:grid;gap:3px;text-align:right}
+.lv-route-num b{font-size:15px;overflow:hidden;text-overflow:ellipsis}
+.lv-facts{display:grid;gap:8px;margin:2px 0 0;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);font-size:13.5px}
+.lv-facts div{display:flex;justify-content:space-between;gap:12px}
+.lv-facts dt{color:rgba(255,255,255,.6)}.lv-facts dd{margin:0;font-weight:600}
+.lv-cta{width:100%;min-height:54px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:16px}
+.lv-cta:disabled{opacity:.55;cursor:default}
+.lv-menu{position:relative}
+.lv-menu-pop{position:absolute;right:0;top:calc(100% + 8px);min-width:210px;padding:6px;border-radius:14px;border:1px solid rgba(194,225,226,.18);background:#0e1a21;box-shadow:0 18px 50px rgba(0,0,0,.5);display:grid;z-index:60}
+.lv-menu-pop button{min-height:44px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:#fff;font:600 14px/1 inherit;text-align:left;cursor:pointer}
+.lv-menu-pop button:hover{background:rgba(255,255,255,.08)}
+.lv-menu-pop .danger{color:#ff9c8a}
+@media(max-width:620px){
+  .live-account{max-width:62vw;overflow:hidden;white-space:nowrap}
+  .lv-hide-sm{display:none}
+  .product-nav .nav-live{width:auto}
+  .lv-main{width:calc(100% - 28px);padding-top:20px}
+  .lv-card{padding:14px;border-radius:18px}
+  .lv-route-num{max-width:40%}
+}
+
+.lv-nav{display:flex;align-items:center;gap:20px;min-width:0}
+.lv-link-nav{font-size:14px;color:rgba(255,255,255,.8)}
+.lv-link-nav:hover{color:#fff}
+@media(max-width:620px){.lv-link-nav{display:none}.lv-nav{gap:0}.lv-menu-pop{right:0;min-width:min(240px,calc(100vw - 28px))}}
+@media(max-width:620px){.lv-wname{display:none}}

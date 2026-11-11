@@ -7,7 +7,6 @@ import { chainLabel } from "../lib/chains.js";
 const POPULAR = ["USDC", "USDT", "ETH", "NEAR", "BTC", "WBTC", "SOL", "BNB"];
 const MAX_ROWS = 120;
 const isDeprecated = (t) => /deprecated/i.test(t.symbol);
-const usd = (p) => (p ? (p >= 1 ? `$${p.toLocaleString("en-US", { maximumFractionDigits: 2 })}` : `$${p.toPrecision(2)}`) : "");
 
 export function TokenAvatar({ token }) {
   return <span className="tp-avatar" aria-hidden="true"><span className="tp-main"><TokenIcon symbol={token.symbol}/></span><span className="tp-chain"><ChainIcon name={chainLabel(token.blockchain)}/></span></span>;
@@ -45,7 +44,6 @@ export default function TokenPicker({ tokens, value, onChange, label }) {
   const row = (token) => <li key={token.assetId}><button type="button" className={`tp-row${token.assetId === value ? " selected" : ""}`} onClick={() => pick(token)}>
     <TokenAvatar token={token}/>
     <span className="tp-info"><b>{token.symbol}</b><small>{chainLabel(token.blockchain)}</small></span>
-    <span className="tp-price">{usd(token.price)}</span>
   </button></li>;
   const shown = rest.slice(0, Math.max(0, MAX_ROWS - popular.length));
 

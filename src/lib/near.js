@@ -62,9 +62,12 @@ async function rpc(params) {
 
 /** Balance in raw units: native NEAR (spendable approximation) or a NEP-141 token. */
 export async function getNearBalance(accountId, token) {
-  if (!token.contractAddress) {
+  // "NEAR" is sent by wrapping the account's native balance, so show what can actually be spent (minus a small reserve for fees/storage).
+  const isNative = !token.contractAddress || (token.contractAddress === "wrap.near" && token.symbol === "NEAR");
+  if (isNative) {
     const r = await rpc({ request_type: "view_account", finality: "final", account_id: accountId });
-    return BigInt(r.amount) - BigInt(r.locked || "0");
+    const spendable = BigInt(r.amount) - BigInt(r.locked || "0") - 200000000000000000000000n; // keep ~0.2 NEAR
+    return spendable > 0n ? spendable : 0n;
   }
   const args = btoa(JSON.stringify({ account_id: accountId }));
   const r = await rpc({ request_type: "call_function", finality: "final", account_id: token.contractAddress, method_name: "ft_balance_of", args_base64: args });

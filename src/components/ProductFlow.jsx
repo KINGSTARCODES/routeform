@@ -4,6 +4,7 @@ import { ROUTES, buildHops, demoRate, formatAmount, formatEta } from "../lib/rou
 import ConceptBanner from "./ConceptBanner.jsx";
 import LogoMark, { RLogoMark } from "./LogoMark.jsx";
 import BrandIcon from "./BrandIcon.jsx";
+import Brand, { LogoMark as NewLogoMark } from "./Logo.jsx";
 import LiveButton from "./LiveButton.jsx";
 
 const tokens = [
@@ -14,7 +15,7 @@ const tokens = [
 ];
 
 export function BrandMark() {
-  return <a className="brand" href="/" aria-label="Routeform home"><span className="brand-mark logo-tint"><RLogoMark size={28}/></span><span>routeform</span></a>;
+  return <Brand href="/"/>;
 }
 
 function TokenSelect({ value, onChange, label }) {
@@ -37,7 +38,7 @@ function WalletArtwork({ selected }) {
     <div className="wallet-art-grid"/>
     <div className="wallet-art-glow"/>
     <div className="wallet-art-orbit orbit-one"/><div className="wallet-art-orbit orbit-two"/>
-    <div className="wallet-art-orb"><span className="logo-tint"><RLogoMark size={46}/></span><i/><i/><i/></div>
+    <div className="wallet-art-orb"><span className="logo-tint"><NewLogoMark size={46}/></span><i/><i/><i/></div>
     <div className="wallet-card-stack">
       <div className="wallet-art-card card-back"><span className="art-card-chip"/><i/><i/></div>
       <div className="wallet-art-card card-mid"><span className="art-card-chip"/><i/><i/></div>
@@ -112,7 +113,7 @@ export function UseProductPage() {
 
   return <div className="product-shell">
     <ConceptBanner/>
-    <header className="site-header"><div className="nav-wrap"><BrandMark/><nav className="nav-links product-nav" aria-label="Main navigation"><a href="/">Home</a><LiveButton/><span className="product-wallet-state"><i aria-hidden="true"/> {wallet?.walletName ? `${wallet.walletName} (demo)` : "Demo session"}</span></nav></div></header>
+    <header className="site-header"><div className="nav-wrap"><BrandMark/><div className="lv-nav"><a href="/" className="lv-link-nav">Home</a><LiveButton/><span className="product-wallet-state lv-link-nav"><i aria-hidden="true"/> {wallet?.walletName ? `${wallet.walletName} (demo)` : "Demo session"}</span></div></div></header>
     <main className="product-main use-main">
       <div className="product-heading"><div><a className="product-back" href="/"><ArrowLeft size={14} aria-hidden="true"/> Back to Routeform</a><h1>One intent.<br/><span>A clearer route.</span></h1><p>Choose what you have, where it should end up, and review a sample route.</p></div></div>
       <div className="demo-session-note"><ShieldCheck size={16} aria-hidden="true"/><span>{wallet?.walletName ? `${wallet.walletName} selected, not connected.` : "No wallet connected."} <a href="/connect">Change wallet <ArrowUpRight size={13} aria-hidden="true"/></a></span></div>

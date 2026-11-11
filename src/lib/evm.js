@@ -94,3 +94,8 @@ export function sendDeposit(provider, { from, to, token, amount }) {
 }
 
 export const shortAddress = (address) => `${address.slice(0, 6)}…${address.slice(-4)}`;
+
+/** Best-effort: ask the wallet to forget this site so the next connect shows its prompt again. */
+export async function disconnectEvm(provider) {
+  try { await provider.request({ method: "wallet_revokePermissions", params: [{ eth_accounts: {} }] }); } catch { /* not supported by every wallet */ }
+}
