@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X, CaretLeft } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 const spring = { type: "spring", damping: 30, stiffness: 320 };
 const FOCUSABLE = 'button:not([tabindex="-1"]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
@@ -28,6 +29,8 @@ export default function Tray({ open, title, onClose, onBack, children }) {
   useEffect(() => {
     if (!open) return;
     returnFocusRef.current = document.activeElement;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     const onKey = (e) => {
       if (e.key === "Escape") { onClose(); return; }
@@ -48,13 +51,15 @@ export default function Tray({ open, title, onClose, onBack, children }) {
     });
 
     return () => {
+      document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
       window.cancelAnimationFrame(raf);
       returnFocusRef.current?.focus?.();
     };
   }, [open, onClose]);
 
-  return (
+  // Portal to <body>: ancestors with backdrop-filter/transform (the sticky header) would otherwise trap position:fixed.
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -96,6 +101,7 @@ export default function Tray({ open, title, onClose, onBack, children }) {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

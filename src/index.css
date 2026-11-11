@@ -353,3 +353,6 @@ body{font-size:16px}
   .tray-card::before{content:"";display:block;width:40px;height:4px;margin:0 auto 14px;border-radius:4px;background:rgba(255,255,255,.28)}
 }
 .live-section-label{margin:4px 0 -4px;font:600 12px/1 inherit;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.live-cancel{min-height:48px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;font:600 15px/1 inherit;cursor:pointer}
+.live-cancel:hover{background:rgba(255,255,255,.08)}
+.tray-root{z-index:1000}

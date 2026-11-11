@@ -60,6 +60,7 @@ export default function WalletModal({ open, onClose, onConnected }) {
       </div>
       {error && <p className="product-error" role="alert">{error}</p>}
       <div className="connect-safety"><ShieldCheck size={16} aria-hidden="true"/><span><b>Live mode uses real funds</b><small>Routeform never holds your assets. Every transaction is approved in your wallet.</small></span></div>
+      <button type="button" className="live-cancel" onClick={onClose}>Cancel</button>
     </div>
   </Tray>;
 }
