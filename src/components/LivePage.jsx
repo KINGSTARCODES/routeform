@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, CircleNotch, ShieldWarning, Wallet, Warning } from "@phosphor-icons/react";
+import { BrandMark } from "./ProductFlow.jsx";
+import TokenPicker from "./TokenPicker.jsx";
+import { chainLabel } from "../lib/chains.js";
 import WalletModal from "./WalletModal.jsx";
 import { getStatus, getTokens, requestQuote, submitDeposit, TERMINAL_STATUSES } from "../lib/oneclick.js";
 import { EVM_CHAINS, connect, discoverWallets, formatUnits, getBalance, isEvmAddress, parseUnits, sendDeposit, shortAddress, switchChain } from "../lib/evm.js";
 import { getNearBalance, nearExplorerTx, restoreNear, sendNearDeposit, signOutNear } from "../lib/near.js";
 import { clearLiveSession, loadLiveSession, saveLiveSession } from "../lib/liveSession.js";
 
-const chainName = (id) => EVM_CHAINS[id]?.name || (id === "near" ? "NEAR" : id.toUpperCase());
+const chainName = (id) => chainLabel(id);
 const label = (t) => `${t.symbol} · ${chainName(t.blockchain)}`;
 const short = (a) => (a.startsWith("0x") ? shortAddress(a) : a.length > 22 ? `${a.slice(0, 10)}…${a.slice(-8)}` : a);
 const STATUS_COPY = {
@@ -155,7 +158,7 @@ export default function LivePage() {
 
   return <div className="product-shell live-shell">
     <div className="live-banner" role="note"><ShieldWarning size={15} aria-hidden="true"/> Live · real funds. Transactions are final once sent.</div>
-    <header className="site-header"><div className="nav-wrap"><a className="brand" href="/" aria-label="Routeform home"><span>routeform</span></a><nav className="nav-links product-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/product">Demo</a>
+    <header className="site-header"><div className="nav-wrap"><BrandMark/><nav className="nav-links product-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/product">Demo</a>
       {wallet ? <button type="button" className="live-account" onClick={disconnect} title="Disconnect"><i aria-hidden="true"/> {wallet.name} · {short(wallet.address)}</button> : <button type="button" className="nav-live" onClick={() => setModalOpen(true)}><Wallet size={15} aria-hidden="true"/> Connect</button>}</nav></div></header>
     <main className="product-main use-main live-main">
       <a className="product-back" href="/"><ArrowLeft size={14} aria-hidden="true"/> Back to Routeform</a>
@@ -165,10 +168,10 @@ export default function LivePage() {
       <section className="swap-panel live-panel" aria-label="Live swap form">
         <div className="swap-input-card"><div className="swap-input-row"><label htmlFor="live-amount">You send</label><span>{balance !== null && from ? `Balance · ${formatUnits(balance, from.decimals)} ${from.symbol}` : " "}</span></div>
           <div className="swap-edit-row"><input id="live-amount" inputMode="decimal" placeholder="0.00" value={amount} onChange={(e) => { setAmount(e.target.value); invalidate(); }}/>
-            <select className="live-select" aria-label="Source asset" value={fromId} onChange={(e) => { setFromId(e.target.value); invalidate(); }}>{sourceTokens.map((t) => <option key={t.assetId} value={t.assetId}>{label(t)}</option>)}</select></div></div>
+            <TokenPicker label="You send" tokens={sourceTokens} value={fromId} onChange={(id) => { setFromId(id); invalidate(); }}/></div></div>
         <div className="swap-input-card swap-destination"><div className="swap-input-row"><span>You receive</span><span>{quote ? `$${Number(quote.amountOutUsd || 0).toFixed(2)}` : " "}</span></div>
           <div className="swap-edit-row"><strong className="swap-estimate">{quote ? quote.amountOutFormatted : "—"}</strong>
-            <select className="live-select" aria-label="Destination asset" value={toId} onChange={(e) => { setToId(e.target.value); setRecipient(""); invalidate(); }}>{tokens.map((t) => <option key={t.assetId} value={t.assetId}>{label(t)}</option>)}</select></div></div>
+            <TokenPicker label="You receive" tokens={tokens} value={toId} onChange={(id) => { setToId(id); setRecipient(""); invalidate(); }}/></div></div>
         <label className="live-field" htmlFor="live-recipient"><span>Recipient address on {to ? chainName(to.blockchain) : "destination"}</span>
           <input id="live-recipient" value={recipient} placeholder={destIsEvm ? "0x…" : to?.blockchain === "near" ? "account.near" : "Destination address"} onChange={(e) => { setRecipient(e.target.value); invalidate(); }} spellCheck="false" autoComplete="off"/></label>
         {!recipientOk && recipient && <p className="product-footnote" role="alert">Enter a valid address for this network. Funds sent to a wrong address cannot be recovered.</p>}

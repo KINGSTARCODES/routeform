@@ -4,22 +4,15 @@ const BASE = "https://1click.chaindefuser.com/v0/";
 const ALLOWED = { tokens: "GET", quote: "POST", "deposit/submit": "POST", status: "GET" };
 
 export default async function handler(req, res) {
-  // Derive endpoint from URL path (/api/oneclick/<endpoint>); fall back to catch-all query param.
-  let endpoint = "";
-  try {
-    const pathname = new URL(req.url || "", "http://localhost").pathname;
-    endpoint = pathname.replace(/^\/api\/oneclick\//, "").replace(/^\//, "").replace(/\/$/, "");
-  } catch {}
-  if (!endpoint) {
-    const parts = Array.isArray(req.query?.path) ? req.query.path : [req.query?.path].filter(Boolean);
-    endpoint = parts.join("/");
-  }
+  // Derive the endpoint from the URL itself: req.query.path differs between Vercel runtimes.
+  const parsed = new URL(req.url, "http://localhost");
+  const endpoint = parsed.pathname.replace(/^\/api\/oneclick\/?/, "").replace(/\/+$/, "");
   if (!(endpoint in ALLOWED)) return res.status(404).json({ message: "Unknown endpoint" });
   if (req.method !== ALLOWED[endpoint]) return res.status(405).json({ message: "Method not allowed" });
 
   const url = new URL(BASE + endpoint);
-  for (const [key, value] of Object.entries(req.query || {})) {
-    if (key !== "path") url.searchParams.set(key, Array.isArray(value) ? value[0] : value);
+  for (const [key, value] of parsed.searchParams) {
+    if (key !== "path") url.searchParams.set(key, value);
   }
   const headers = { Accept: "application/json" };
   if (process.env.ONECLICK_JWT) headers.Authorization = `Bearer ${process.env.ONECLICK_JWT}`;

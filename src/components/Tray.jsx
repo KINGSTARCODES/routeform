@@ -18,7 +18,7 @@ function useIsMobile() {
   return mobile;
 }
 
-export default function Tray({ open, title, onClose, onBack, children }) {
+export default function Tray({ open, title, onClose, onBack, className = "", children }) {
   const reduce = useReducedMotion();
   const mobile = useIsMobile();
   // Desktop: centered card that fades/scales in. Mobile: bottom sheet that slides up.
@@ -84,7 +84,7 @@ export default function Tray({ open, title, onClose, onBack, children }) {
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={hidden}
             transition={reduce ? { duration: 0.15 } : mobile ? { type: "spring", damping: 34, stiffness: 340 } : spring}
-            className="tray-card"
+            className={`tray-card ${className}`.trim()}
           >
             <div className="tray-head">
               {onBack ? (

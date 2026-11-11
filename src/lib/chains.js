@@ -1,0 +1,3 @@
+// Short, readable network names for 1Click blockchain ids (also the keys the icon map understands).
+const NAMES = { eth: "Ethereum", arb: "Arbitrum", base: "Base", op: "Optimism", near: "NEAR", pol: "Polygon", bsc: "BNB Chain", avax: "Avalanche", sol: "Solana", btc: "Bitcoin", doge: "Dogecoin", xrp: "XRP Ledger", zec: "Zcash", ton: "TON", tron: "Tron", sui: "Sui", aptos: "Aptos", cardano: "Cardano", stellar: "Stellar", bera: "Berachain", gnosis: "Gnosis", starknet: "Starknet", ltc: "Litecoin", bch: "Bitcoin Cash" };
+export const chainLabel = (id) => NAMES[id] || (id ? id.charAt(0).toUpperCase() + id.slice(1) : "");

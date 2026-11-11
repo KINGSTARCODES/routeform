@@ -9,6 +9,7 @@ import ConceptBanner from "./components/ConceptBanner.jsx";
 import { WalletConnectPage, UseProductPage } from "./components/ProductFlow.jsx";
 import LiveButton from "./components/LiveButton.jsx";
 import LivePage from "./components/LivePage.jsx";
+import LegalPage from "./components/LegalPage.jsx";
 import LogoMark, { RLogoMark } from "./components/LogoMark.jsx";
 import BrandIcon from "./components/BrandIcon.jsx";
 
@@ -125,7 +126,7 @@ function HomePage() {
 
     <main>
       <section className="hero section-wrap" aria-labelledby="hero-title">
-        <div className="hero-copy" data-reveal><h1 id="hero-title">Move value.<br/><span>Skip the maze.</span></h1><p className="hero-description">Say which asset you want and where it should land. Routeform lays out the cross-chain routes through NEAR Intents, with time, fees and settlement in one view.</p><div className="hero-actions"><a className="button button-primary" href="#route-builder">Explore a route <ArrowRight size={17} aria-hidden="true"/></a><a className="text-link" href="#how">See how it works <ArrowDown size={15} aria-hidden="true"/></a></div></div>
+        <div className="hero-copy" data-reveal><h1 id="hero-title">Move value.<br/><span>Skip the maze.</span></h1><p className="hero-description">Say which asset you want and where it should land. Routeform lays out the cross-chain routes through NEAR Intents, with time, fees and settlement in one view.</p><div className="hero-actions"><a className="button button-primary" href="#route-builder">Explore a route <ArrowRight size={17} aria-hidden="true"/></a><a className="button button-ghost hero-demo" href="/product">Try the demo</a><a className="text-link" href="#how">See how it works <ArrowDown size={15} aria-hidden="true"/></a></div></div>
         <div className="hero-visual" data-reveal><div className="visual-grid"/><NetworkOrb/><RoutePreview route={route} outcome={outcome}/><div className="floating-note note-settlement"><span className="mini-check"><Check size={11} weight="bold" aria-hidden="true"/></span><span><b>Settlement</b><small>visible at a glance</small></span></div><div className="floating-note note-intent"><span className="mini-spark"><Lightning size={13} weight="fill" aria-hidden="true"/></span><span><b>One clear intent</b><small>many possible paths</small></span></div><div className="visual-caption"><span>ROUTING, MADE LEGIBLE</span><span className="caption-line"/></div></div>
       </section>
 
@@ -145,7 +146,7 @@ function HomePage() {
       <section className="closing-section section-wrap" data-reveal><div className="closing-card"><div className="closing-glow"/><div className="closing-copy"><span className="eyebrow">MAKE THE NEXT MOVE CLEAR</span><h2>Your intent is<br/>the <span>starting point.</span></h2><p>Try the route builder and see how Routeform makes cross-chain movement easier to understand.</p><a className="button button-light" href="#route-builder">Try the route builder <ArrowRight size={16} aria-hidden="true"/></a></div><div className="closing-visual"><NetworkOrb/><div className="closing-token logo-tint" aria-hidden="true"><RLogoMark size={28}/></div></div></div></section>
     </main>
 
-    <footer className="site-footer"><div className="section-wrap footer-main"><div className="footer-brand"><Brand footer/><p>Cross-chain routes, shaped around the outcome you want.</p><span className="footer-note">An interface concept for NEAR Intents.</span></div><div className="footer-col"><span className="eyebrow">EXPLORE</span><a href="#how">How it works</a><a href="#features">Features</a><a href="#route-builder">Route builder</a></div><div className="footer-col"><span className="eyebrow">PRODUCT</span><a href="/product">Try the demo</a><a href="/connect">Choose a wallet</a></div><div className="footer-col footer-status"><span className="eyebrow">BUILT AROUND</span><span className="footer-ecosystem"><i className="eco-near logo-tint" aria-hidden="true"><LogoMark size={13}/></i> NEAR Intents</span></div></div><div className="section-wrap footer-bottom"><span>© {new Date().getFullYear()} Routeform</span><span className="footer-legal">Estimates are illustrative, not live quotes.</span><a href="#home">Back to top ↑</a></div></footer>
+    <footer className="site-footer"><div className="section-wrap footer-main"><div className="footer-brand"><Brand footer/><p>Cross-chain routes, shaped around the outcome you want.</p><span className="footer-note">An interface concept for NEAR Intents.</span></div><div className="footer-col"><span className="eyebrow">EXPLORE</span><a href="#how">How it works</a><a href="#features">Features</a><a href="#route-builder">Route builder</a></div><div className="footer-col"><span className="eyebrow">PRODUCT</span><a href="/product">Try the demo</a><a href="/connect">Choose a wallet</a></div><div className="footer-col footer-status"><span className="eyebrow">BUILT AROUND</span><span className="footer-ecosystem"><i className="eco-near logo-tint" aria-hidden="true"><LogoMark size={13}/></i> NEAR Intents</span></div></div><div className="section-wrap footer-bottom"><span>© {new Date().getFullYear()} Routeform</span><span className="footer-legal"><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="https://github.com/KINGSTARCODES/routeform/issues" target="_blank" rel="noreferrer">Feedback</a></span><span className="footer-legal">Estimates are illustrative, not live quotes.</span><a href="#home">Back to top ↑</a></div></footer>
 
     <Tray open={confirmOpen} title="Save this route?" onClose={close}><div className="tray-body"><p className="tray-text">{outcome.trim()} via <strong>{route.name}</strong></p><div className="tray-hops">{route.hops.join(" → ")}</div><p className="tray-note">Saved to recent routes on this device only. Nothing is sent.</p><button type="button" onClick={confirm} className="tray-action">Save to recent routes</button></div></Tray>
   </div>;
@@ -156,5 +157,7 @@ export default function App() {
   if (pathname === "/connect") return <WalletConnectPage/>;
   if (pathname === "/product") return <UseProductPage/>;
   if (pathname === "/live") return <LivePage/>;
+  if (pathname === "/terms") return <LegalPage kind="terms"/>;
+  if (pathname === "/privacy") return <LegalPage kind="privacy"/>;
   return <HomePage/>;
 }

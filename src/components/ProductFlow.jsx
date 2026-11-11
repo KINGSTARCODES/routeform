@@ -13,7 +13,7 @@ const tokens = [
   { symbol: "USDT", chain: "Optimism", mark: "₮", color: "token-usdt", icon: "usdt" },
 ];
 
-function BrandMark() {
+export function BrandMark() {
   return <a className="brand" href="/" aria-label="Routeform home"><span className="brand-mark logo-tint"><RLogoMark size={28}/></span><span>routeform</span></a>;
 }
 
