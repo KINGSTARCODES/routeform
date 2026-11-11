@@ -3,12 +3,13 @@ import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Check, CircleNotch, Cub
 import { ROUTES, buildHops, demoRate, formatAmount, formatEta } from "../lib/routes.js";
 import ConceptBanner from "./ConceptBanner.jsx";
 import LogoMark, { RLogoMark } from "./LogoMark.jsx";
+import BrandIcon from "./BrandIcon.jsx";
 
 const tokens = [
-  { symbol: "USDC", chain: "Arbitrum", mark: "$", color: "token-usdc" },
-  { symbol: "ETH", chain: "Ethereum", mark: "Ξ", color: "token-eth" },
+  { symbol: "USDC", chain: "Arbitrum", mark: "$", color: "token-usdc", icon: "usdc" },
+  { symbol: "ETH", chain: "Ethereum", mark: "Ξ", color: "token-eth", icon: "eth" },
   { symbol: "NEAR", chain: "NEAR", mark: "N", color: "token-near", logo: true },
-  { symbol: "USDT", chain: "Optimism", mark: "₮", color: "token-usdt" },
+  { symbol: "USDT", chain: "Optimism", mark: "₮", color: "token-usdt", icon: "usdt" },
 ];
 
 function BrandMark() {
@@ -16,17 +17,17 @@ function BrandMark() {
 }
 
 function TokenSelect({ value, onChange, label }) {
-  return <label className="product-token-select"><span className="product-token-label">{label}</span><span className="product-token-control"><i className={`product-token-icon ${value.color}${value.logo ? " logo-tint" : ""}`} aria-hidden="true">{value.logo ? <LogoMark size={22}/> : value.mark}</i><span className="product-token-name"><b>{value.symbol}</b><small>{value.chain}</small></span><select aria-label={label} value={value.symbol} onChange={(event) => onChange(tokens.find((token) => token.symbol === event.target.value))}>{tokens.map((token) => <option key={token.symbol} value={token.symbol}>{token.symbol} on {token.chain}</option>)}</select><span className="product-select-caret" aria-hidden="true">⌄</span></span></label>;
+  return <label className="product-token-select"><span className="product-token-label">{label}</span><span className="product-token-control"><i className={`product-token-icon ${value.color}${value.logo ? " logo-tint" : ""}${value.icon ? " brand-icon-slot" : ""}`} aria-hidden="true">{value.logo ? <LogoMark size={22}/> : value.icon ? <BrandIcon icon={value.icon} size={24}/> : value.mark}</i><span className="product-token-name"><b>{value.symbol}</b><small>{value.chain}</small></span><select aria-label={label} value={value.symbol} onChange={(event) => onChange(tokens.find((token) => token.symbol === event.target.value))}>{tokens.map((token) => <option key={token.symbol} value={token.symbol}>{token.symbol} on {token.chain}</option>)}</select><span className="product-select-caret" aria-hidden="true">⌄</span></span></label>;
 }
 
-// Letter marks are placeholders. Swap in the official wallet logos (where their brand terms allow it).
+// Official wallet logos from the supplied icon set. Bitget has no asset in the archive, so its letter mark stays.
 const walletChoices = [
   { id: "near", name: "NEAR Wallet", kind: "NEAR network", mark: "N", className: "near-mark", logo: true },
   { id: "bitget", name: "Bitget Wallet", kind: "EVM wallet", mark: "B", className: "bitget-mark" },
-  { id: "okx", name: "OKX Wallet", kind: "EVM wallet", mark: "X", className: "okx-mark" },
-  { id: "metamask", name: "MetaMask", kind: "EVM wallet", mark: "M", className: "metamask-mark" },
-  { id: "walletconnect", name: "WalletConnect", kind: "Multi-chain protocol", mark: "W", className: "walletconnect-mark" },
-  { id: "coinbase", name: "Coinbase Wallet", kind: "EVM wallet", mark: "C", className: "coinbase-mark" },
+  { id: "okx", name: "OKX Wallet", kind: "EVM wallet", mark: "X", className: "okx-mark", icon: "okx" },
+  { id: "metamask", name: "MetaMask", kind: "EVM wallet", mark: "M", className: "metamask-mark", icon: "metamask" },
+  { id: "walletconnect", name: "WalletConnect", kind: "Multi-chain protocol", mark: "W", className: "walletconnect-mark", icon: "walletconnect" },
+  { id: "coinbase", name: "Coinbase Wallet", kind: "EVM wallet", mark: "C", className: "coinbase-mark", icon: "coinbase" },
 ];
 
 function WalletArtwork({ selected }) {
@@ -39,7 +40,7 @@ function WalletArtwork({ selected }) {
     <div className="wallet-card-stack">
       <div className="wallet-art-card card-back"><span className="art-card-chip"/><i/><i/></div>
       <div className="wallet-art-card card-mid"><span className="art-card-chip"/><i/><i/></div>
-      <div className="wallet-art-card card-front"><span className={`art-wallet-mark ${wallet.className}${wallet.logo ? " logo-tint" : ""}`}>{wallet.logo ? <LogoMark size={26}/> : wallet.mark}</span><span className="art-card-copy"><b>{wallet.name}</b><small>Selected wallet</small></span><span className="art-card-spark">✦</span></div>
+      <div className="wallet-art-card card-front"><span className={`art-wallet-mark ${wallet.className}${wallet.logo ? " logo-tint" : ""}${wallet.icon ? " brand-icon-slot" : ""}`}>{wallet.logo ? <LogoMark size={26}/> : wallet.icon ? <BrandIcon icon={wallet.icon} size={34}/> : wallet.mark}</span><span className="art-card-copy"><b>{wallet.name}</b><small>Selected wallet</small></span><span className="art-card-spark">✦</span></div>
     </div>
   </div>;
 }
@@ -75,7 +76,7 @@ export function WalletConnectPage() {
           <p className="connect-lead">Pick a wallet to continue to the demo. Live wallet connections aren't available yet.</p>
           <div className="wallet-options" role="group" aria-label="Wallet choices">
             {walletChoices.map((wallet) => <button key={wallet.id} type="button" className={`wallet-option${selected === wallet.id ? " selected" : ""}`} aria-pressed={selected === wallet.id} onClick={() => setSelected(wallet.id)}>
-              <span className={`wallet-option-mark ${wallet.className}${wallet.logo ? " logo-tint" : ""}`} aria-hidden="true">{wallet.logo ? <LogoMark size={22}/> : wallet.mark}</span><span className="wallet-option-copy"><b>{wallet.name}</b><small>{wallet.kind}</small></span><span className="wallet-radio" aria-hidden="true"/>
+              <span className={`wallet-option-mark ${wallet.className}${wallet.logo ? " logo-tint" : ""}${wallet.icon ? " brand-icon-slot" : ""}`} aria-hidden="true">{wallet.logo ? <LogoMark size={22}/> : wallet.icon ? <BrandIcon icon={wallet.icon} size={26}/> : wallet.mark}</span><span className="wallet-option-copy"><b>{wallet.name}</b><small>{wallet.kind}</small></span><span className="wallet-radio" aria-hidden="true"/>
             </button>)}
           </div>
           <button className="button button-primary connect-submit" onClick={continueDemo} disabled={busy}>{busy ? <><CircleNotch className="spin" size={17} aria-hidden="true"/> Opening demo…</> : <><Wallet size={17} aria-hidden="true"/> Continue to demo <ArrowRight size={16} aria-hidden="true"/></>}</button>

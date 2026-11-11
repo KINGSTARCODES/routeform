@@ -309,3 +309,5 @@ body{font-size:16px}
 .orb-logo img{width:78px;height:78px;object-fit:contain}
 .wallet-art-orb img{width:44px;height:44px;object-fit:contain}
 .closing-token img{width:26px;height:26px;object-fit:contain}
+.brand-icon-slot{background:transparent;border-color:transparent;box-shadow:none;padding:1px}
+.brand-icon-slot img{width:100%;height:100%;object-fit:contain;display:block}
