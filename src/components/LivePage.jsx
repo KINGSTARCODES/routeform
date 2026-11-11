@@ -30,7 +30,7 @@ const STATUS_COPY = {
   FAILED: "The swap failed. Check your wallet and the explorer.",
 };
 
-function WalletMenu({ wallet, onConnect, onChange, onDisconnect }) {
+function WalletMenu({ wallet, balance, onConnect, onChange, onDisconnect }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   useEffect(() => {
@@ -46,6 +46,7 @@ function WalletMenu({ wallet, onConnect, onChange, onDisconnect }) {
   return <div className="lv-menu" ref={ref}>
     <button type="button" className="live-account" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(!open)}><i aria-hidden="true"/> <span className="lv-wname">{wallet.name} · </span>{short(wallet.address)} <CaretDown size={13} aria-hidden="true"/></button>
     {open && <div className="lv-menu-pop" role="menu">
+      <div className="lv-menu-info"><small>Available balance</small><b>{balance ? balance.amount : "Loading…"}</b>{balance?.network && <small>{balance.network}</small>}</div>
       <button type="button" role="menuitem" onClick={() => { setOpen(false); onChange(); }}>Change wallet</button>
       <button type="button" role="menuitem" className="danger" onClick={() => { setOpen(false); onDisconnect(); }}>Disconnect wallet</button>
     </div>}
@@ -229,7 +230,7 @@ export default function LivePage() {
   return <div className="product-shell live-shell">
     <div className="live-banner" role="note"><ShieldWarning size={15} aria-hidden="true"/> Live · real funds. Transactions are final once sent.</div>
     <header className="site-header"><div className="nav-wrap"><Brand href="/"/><div className="lv-nav"><a href="/" className="lv-link-nav">Home</a><a href="/product" className="lv-link-nav">Demo</a>
-      <WalletMenu wallet={wallet} onConnect={() => setModalOpen(true)} onChange={() => setModalOpen(true)} onDisconnect={disconnect}/></div></div></header>
+      <WalletMenu wallet={wallet} balance={balance !== null && from ? { amount: `${formatUnits(balance, from.decimals)} ${from.symbol}`, network: `on ${chainLabel(from.blockchain)}` } : null} onConnect={() => setModalOpen(true)} onChange={() => setModalOpen(true)} onDisconnect={disconnect}/></div></div></header>
 
     <main className="lv-main">
       <div className="lv-head">

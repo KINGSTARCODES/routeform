@@ -113,10 +113,9 @@ export function UseProductPage() {
 
   return <div className="product-shell">
     <ConceptBanner/>
-    <header className="site-header"><div className="nav-wrap"><BrandMark/><div className="lv-nav"><a href="/" className="lv-link-nav">Home</a><LiveButton/><span className="product-wallet-state lv-link-nav"><i aria-hidden="true"/> {wallet?.walletName ? `${wallet.walletName} (demo)` : "Demo session"}</span></div></div></header>
+    <header className="site-header"><div className="nav-wrap"><BrandMark/><div className="lv-nav"><a href="/" className="lv-link-nav">Home</a><LiveButton/></div></div></header>
     <main className="product-main use-main">
       <div className="product-heading"><div><a className="product-back" href="/"><ArrowLeft size={14} aria-hidden="true"/> Back to Routeform</a><h1>One intent.<br/><span>A clearer route.</span></h1><p>Choose what you have, where it should end up, and review a sample route.</p></div></div>
-      <div className="demo-session-note"><ShieldCheck size={16} aria-hidden="true"/><span>{wallet?.walletName ? `${wallet.walletName} selected, not connected.` : "No wallet connected."} <a href="/connect">Change wallet <ArrowUpRight size={13} aria-hidden="true"/></a></span></div>
       <div className="use-product-grid">
         <section className="swap-panel" aria-label="Swap form">
           <div className="swap-panel-head"><div><h2>Set your outcome</h2></div><span className="product-step">Step 1 of 2</span></div>

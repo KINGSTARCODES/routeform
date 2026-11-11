@@ -494,3 +494,7 @@ body{font-size:16px}
 .lv-link-nav:hover{color:#fff}
 @media(max-width:620px){.lv-link-nav{display:none}.lv-nav{gap:0}.lv-menu-pop{right:0;min-width:min(240px,calc(100vw - 28px))}}
 @media(max-width:620px){.lv-wname{display:none}}
+
+.lv-menu-info{display:grid;gap:3px;padding:10px 12px 12px;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,.1)}
+.lv-menu-info small{font-size:12px;color:rgba(255,255,255,.55)}
+.lv-menu-info b{font-size:18px;overflow-wrap:anywhere}
