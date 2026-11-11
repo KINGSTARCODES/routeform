@@ -15,6 +15,11 @@
     "@phosphor-icons/react": "^2.1.10",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "@near-wallet-selector/core": "^8.10.0",
+    "@near-wallet-selector/meteor-wallet": "^8.10.0",
+    "@near-wallet-selector/my-near-wallet": "^8.10.0",
+    "@near-wallet-selector/here-wallet": "^8.10.0",
+    "@near-wallet-selector/hot-wallet": "^8.10.0",
     "@fontsource/manrope": "latest",
     "@fontsource/space-grotesk": "latest",
     "@fontsource/ibm-plex-mono": "latest"

@@ -4,6 +4,7 @@ import { ROUTES, buildHops, demoRate, formatAmount, formatEta } from "../lib/rou
 import ConceptBanner from "./ConceptBanner.jsx";
 import LogoMark, { RLogoMark } from "./LogoMark.jsx";
 import BrandIcon from "./BrandIcon.jsx";
+import LiveButton from "./LiveButton.jsx";
 
 const tokens = [
   { symbol: "USDC", chain: "Arbitrum", mark: "$", color: "token-usdc", icon: "usdc" },
@@ -111,7 +112,7 @@ export function UseProductPage() {
 
   return <div className="product-shell">
     <ConceptBanner/>
-    <header className="site-header"><div className="nav-wrap"><BrandMark/><nav className="nav-links product-nav" aria-label="Main navigation"><a href="/">Home</a><span className="product-wallet-state"><i aria-hidden="true"/> {wallet?.walletName ? `${wallet.walletName} (demo)` : "Demo session"}</span></nav></div></header>
+    <header className="site-header"><div className="nav-wrap"><BrandMark/><nav className="nav-links product-nav" aria-label="Main navigation"><a href="/">Home</a><LiveButton/><span className="product-wallet-state"><i aria-hidden="true"/> {wallet?.walletName ? `${wallet.walletName} (demo)` : "Demo session"}</span></nav></div></header>
     <main className="product-main use-main">
       <div className="product-heading"><div><a className="product-back" href="/"><ArrowLeft size={14} aria-hidden="true"/> Back to Routeform</a><h1>One intent.<br/><span>A clearer route.</span></h1><p>Choose what you have, where it should end up, and review a sample route.</p></div></div>
       <div className="demo-session-note"><ShieldCheck size={16} aria-hidden="true"/><span>{wallet?.walletName ? `${wallet.walletName} selected, not connected.` : "No wallet connected."} <a href="/connect">Change wallet <ArrowUpRight size={13} aria-hidden="true"/></a></span></div>

@@ -1,12 +1,27 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X, CaretLeft } from "@phosphor-icons/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const spring = { type: "spring", damping: 30, stiffness: 320 };
 const FOCUSABLE = 'button:not([tabindex="-1"]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
+function useIsMobile() {
+  const query = "(max-width: 620px)";
+  const [mobile, setMobile] = useState(() => typeof window !== "undefined" && window.matchMedia(query).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const on = () => setMobile(mq.matches);
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
+  return mobile;
+}
+
 export default function Tray({ open, title, onClose, onBack, children }) {
   const reduce = useReducedMotion();
+  const mobile = useIsMobile();
+  // Desktop: centered card that fades/scales in. Mobile: bottom sheet that slides up.
+  const hidden = reduce ? { opacity: 0 } : mobile ? { y: "100%", opacity: 1 } : { y: 24, opacity: 0, scale: 0.98 };
   const dialogRef = useRef(null);
   const returnFocusRef = useRef(null);
 
@@ -60,11 +75,10 @@ export default function Tray({ open, title, onClose, onBack, children }) {
             role="dialog"
             aria-modal="true"
             aria-label={title}
-            layout
-            initial={reduce ? { opacity: 0 } : { y: 48, opacity: 0, scale: 0.98 }}
+            initial={hidden}
             animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={reduce ? { opacity: 0 } : { y: 48, opacity: 0, scale: 0.98 }}
-            transition={reduce ? { duration: 0.15 } : spring}
+            exit={hidden}
+            transition={reduce ? { duration: 0.15 } : mobile ? { type: "spring", damping: 34, stiffness: 340 } : spring}
             className="tray-card"
           >
             <div className="tray-head">

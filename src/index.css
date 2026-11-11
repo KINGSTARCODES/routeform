@@ -311,3 +311,45 @@ body{font-size:16px}
 .closing-token img{width:26px;height:26px;object-fit:contain}
 .brand-icon-slot{background:transparent;border-color:transparent;box-shadow:none;padding:1px}
 .brand-icon-slot img{width:100%;height:100%;object-fit:contain;display:block}
+
+/* ---- Live mode + NEAR wallets (commits 3+4) ---- */
+
+/* ---- Live mode ---- */
+.nav-live{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 16px;border-radius:999px;border:1px solid rgba(0,236,151,.55);background:rgba(0,236,151,.1);color:#7dffc8;font:600 14px/1 inherit;cursor:pointer;transition:background .2s,transform .2s}
+.nav-live:hover{background:rgba(0,236,151,.2)}
+.nav-live:focus-visible,.live-account:focus-visible,.live-wallet-btn:focus-visible{outline:2px solid #7dffc8;outline-offset:2px}
+.live-banner{display:flex;gap:8px;align-items:center;justify-content:center;padding:8px 16px;background:#2a1a05;color:#ffc46b;font-size:13px;font-weight:600;border-bottom:1px solid rgba(255,196,107,.3)}
+.live-account{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:#fff;font:500 13px/1 inherit;cursor:pointer}
+.live-account i{width:8px;height:8px;border-radius:50%;background:#00ec97}
+.live-main{max-width:560px;margin-inline:auto}
+.live-lead{color:rgba(255,255,255,.72);margin:0 0 20px}
+.live-panel{display:grid;gap:12px}
+.live-select{max-width:48%;min-height:44px;padding:0 10px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:#14161b;color:#fff;font:600 14px/1 inherit}
+.live-field{display:grid;gap:6px;font-size:13px;color:rgba(255,255,255,.75)}
+.live-field input{min-height:46px;padding:0 12px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:#14161b;color:#fff;font:500 14px/1 ui-monospace,monospace}
+.live-quote{display:grid;gap:8px;margin:0;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);font-size:14px}
+.live-quote div{display:flex;justify-content:space-between;gap:12px}
+.live-quote dt{color:rgba(255,255,255,.65)}.live-quote dd{margin:0;font-weight:600;text-align:right}
+.live-risk{display:flex;gap:8px;align-items:flex-start;margin:0;padding:12px;border-radius:12px;background:#2a1a05;color:#ffc46b;font-size:13px;line-height:1.45}
+.live-result a{color:#7dffc8}
+.live-again{margin-top:10px;display:block;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:none;color:#fff;cursor:pointer}
+.live-modal{display:grid;gap:14px;padding:4px 2px 2px}
+.live-modal-lead,.live-modal-note,.live-modal-status{margin:0;font-size:14px;color:rgba(255,255,255,.78);line-height:1.5;display:flex;gap:8px;align-items:center}
+.live-modal-note{font-size:12.5px;color:rgba(255,255,255,.6)}
+.live-wallet-list{display:grid;gap:8px}
+.live-wallet-btn{display:flex;align-items:center;gap:12px;min-height:52px;padding:0 14px;border-radius:14px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#fff;font:600 15px/1 inherit;cursor:pointer;text-align:left}
+.live-wallet-btn:hover:not(:disabled){background:rgba(255,255,255,.1)}
+.live-wallet-btn:disabled{opacity:.6;cursor:default}
+.live-wallet-btn img{border-radius:8px}
+.live-wallet-fallback{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#2b2f3a}
+@media(max-width:700px){.nav-live{width:100%;justify-content:center}.live-select{max-width:50%}}
+
+/* ---- Popup: blurred backdrop on every screen; centered on PC, bottom sheet on mobile ---- */
+.tray-backdrop{background:rgba(3,9,12,.55);-webkit-backdrop-filter:blur(14px) saturate(1.1);backdrop-filter:blur(14px) saturate(1.1)}
+.tray-card{max-height:calc(100dvh - 48px);overflow-y:auto;overscroll-behavior:contain}
+@media(max-width:620px){
+  .tray-root{align-items:flex-end;justify-content:stretch;padding:0}
+  .tray-card{max-width:none;max-height:88dvh;border-radius:22px 22px 0 0;padding:12px 20px calc(24px + env(safe-area-inset-bottom))}
+  .tray-card::before{content:"";display:block;width:40px;height:4px;margin:0 auto 14px;border-radius:4px;background:rgba(255,255,255,.28)}
+}
+.live-section-label{margin:4px 0 -4px;font:600 12px/1 inherit;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5)}

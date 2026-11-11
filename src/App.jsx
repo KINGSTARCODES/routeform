@@ -7,6 +7,8 @@ import RouteCard from "./components/RouteCard.jsx";
 import History from "./components/History.jsx";
 import ConceptBanner from "./components/ConceptBanner.jsx";
 import { WalletConnectPage, UseProductPage } from "./components/ProductFlow.jsx";
+import LiveButton from "./components/LiveButton.jsx";
+import LivePage from "./components/LivePage.jsx";
 import LogoMark, { RLogoMark } from "./components/LogoMark.jsx";
 import BrandIcon from "./components/BrandIcon.jsx";
 
@@ -119,7 +121,7 @@ function HomePage() {
 
   return <div className="site-shell" id="home">
     <ConceptBanner/>
-    <header className="site-header"><div className="nav-wrap"><Brand/><button type="button" className="menu-toggle" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="primary-nav" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X aria-hidden="true"/> : <List aria-hidden="true"/>}</button><nav id="primary-nav" className={menuOpen ? "nav-links nav-open" : "nav-links"} aria-label="Main navigation"><a href="#home" onClick={closeMenu}>Home</a><a href="#how" onClick={closeMenu}>How it works</a><a href="#features" onClick={closeMenu}>Features</a><a href="#route-builder" onClick={closeMenu}>Route builder</a><a className="nav-cta" href="/product">Try the demo <ArrowUpRight size={15} aria-hidden="true"/></a></nav></div></header>
+    <header className="site-header"><div className="nav-wrap"><Brand/><button type="button" className="menu-toggle" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="primary-nav" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X aria-hidden="true"/> : <List aria-hidden="true"/>}</button><nav id="primary-nav" className={menuOpen ? "nav-links nav-open" : "nav-links"} aria-label="Main navigation"><a href="#home" onClick={closeMenu}>Home</a><a href="#how" onClick={closeMenu}>How it works</a><a href="#features" onClick={closeMenu}>Features</a><a href="#route-builder" onClick={closeMenu}>Route builder</a><LiveButton onOpen={closeMenu}/><a className="nav-cta" href="/product">Try the demo <ArrowUpRight size={15} aria-hidden="true"/></a></nav></div></header>
 
     <main>
       <section className="hero section-wrap" aria-labelledby="hero-title">
@@ -153,5 +155,6 @@ export default function App() {
   const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
   if (pathname === "/connect") return <WalletConnectPage/>;
   if (pathname === "/product") return <UseProductPage/>;
+  if (pathname === "/live") return <LivePage/>;
   return <HomePage/>;
 }
