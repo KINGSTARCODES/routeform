@@ -581,3 +581,19 @@ body{font-size:16px}
 .ss-close{margin-left:auto;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:none;color:#d2dfde;font-size:13px;cursor:pointer}
 .live-pill{display:flex;align-items:center;gap:8px;width:100%;margin-top:14px;padding:12px 14px;border:1px solid rgba(68,199,176,.25);border-radius:12px;background:rgba(68,199,176,.07);color:#cfe9e2;font-size:13px;cursor:pointer;text-align:left}
 .live-pill span{margin-left:auto;color:#9be1c9}
+
+/* Revolving networks: two counter-rotating rings around the Routeform mark */
+.network-orb .orb-core{position:relative;z-index:2}
+.orb-ring{position:absolute;border-radius:50%;border:1px dashed rgba(119,211,207,.18);animation:orbSpin 36s linear infinite;z-index:1}
+.orb-ring.ring-inner{inset:19%;animation-duration:26s}
+.orb-ring.ring-outer{inset:2%;animation-duration:44s;animation-direction:reverse;border-color:rgba(116,196,213,.14)}
+.orb-ring .orb-ring-node{width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:transparent;border-color:transparent;box-shadow:none;padding:0}
+.orb-ring.ring-outer .orb-ring-node{width:30px;height:30px;margin:-15px 0 0 -15px}
+.orb-node-inner{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;animation:orbSpin 26s linear infinite reverse}
+.ring-outer .orb-node-inner{animation-duration:44s;animation-direction:normal}
+@keyframes orbSpin{to{transform:rotate(360deg)}}
+.orbit-a{animation:orbitDrift 24s linear infinite}
+.orbit-b{animation:orbitDrift 32s linear infinite reverse}
+@keyframes orbitDrift{to{rotate:360deg}}
+@media(max-width:620px){.orb-ring .orb-ring-node{width:28px;height:28px;margin:-14px 0 0 -14px}.orb-ring.ring-outer .orb-ring-node{width:25px;height:25px;margin:-12.5px 0 0 -12.5px}}
+@media(prefers-reduced-motion:reduce){.orb-ring,.orb-node-inner,.orbit-a,.orbit-b{animation:none}}

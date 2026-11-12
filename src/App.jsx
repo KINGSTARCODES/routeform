@@ -54,8 +54,18 @@ function RoutePreview({ route, outcome }) {
   </div>;
 }
 
+// Supported networks revolve around the Routeform mark: two counter-rotating rings.
+const NET_ICON = (slug) => `/icons/networks/${slug}.svg`;
+const ORBIT_INNER = [{ n: "NEAR" }, { n: "Ethereum", b: "ethereum" }, { n: "Arbitrum", b: "arbitrum" }, { n: "Base", b: "base" }];
+const ORBIT_OUTER = [{ n: "Optimism", b: "optimism" }, { n: "Polygon", s: "polygon" }, { n: "BNB Chain", s: "binance-smart-chain" }, { n: "Avalanche", s: "avalanche" }, { n: "Solana", s: "solana" }];
+function OrbitRing({ nodes, className, offset = 0, size = 30 }) {
+  return <div className={`orb-ring ${className}`}>{nodes.map((node, i) => {
+    const a = (offset + (360 / nodes.length) * i) * (Math.PI / 180);
+    return <span className="orb-node orb-ring-node" key={node.n} style={{ left: `${50 + 50 * Math.cos(a)}%`, top: `${50 + 50 * Math.sin(a)}%` }} title={node.n}><span className="orb-node-inner">{node.b ? <BrandIcon icon={node.b} size={size}/> : node.s ? <img src={NET_ICON(node.s)} width={size} height={size} style={{ display: "block", width: size, height: size, borderRadius: "50%", objectFit: "contain" }} alt="" aria-hidden="true"/> : <LogoMark size={size - 4}/>}</span></span>;
+  })}</div>;
+}
 function NetworkOrb() {
-  return <div className="network-orb" aria-hidden="true"><div className="orb-core"><span className="orb-logo"><NewLogoMark size={72}/></span></div><i className="orbit orbit-a"/><i className="orbit orbit-b"/><i className="orbit orbit-c"/><span className="orb-node node-a logo-tint"><LogoMark size={17}/></span><span className="orb-node node-b brand-icon-slot"><BrandIcon icon="base" size={30}/></span><span className="orb-node node-c brand-icon-slot"><BrandIcon icon="eth" size={30}/></span></div>;
+  return <div className="network-orb" aria-hidden="true"><i className="orbit orbit-a"/><i className="orbit orbit-b"/><div className="orb-core"><span className="orb-logo"><NewLogoMark size={72}/></span></div><OrbitRing nodes={ORBIT_INNER} className="ring-inner"/><OrbitRing nodes={ORBIT_OUTER} className="ring-outer" offset={20} size={26}/></div>;
 }
 
 function DashboardPreview({ route, outcome }) {
