@@ -5,6 +5,7 @@ import TokenPicker from "./TokenPicker.jsx";
 import WalletModal from "./WalletModal.jsx";
 import { chainLabel } from "../lib/chains.js";
 import RecentSwaps from "./RecentSwaps.jsx";
+import SwapStatusModal from "./SwapStatusModal.jsx";
 import { getStatus, getTokens, requestQuote, submitDeposit, TERMINAL_STATUSES } from "../lib/oneclick.js";
 import { EVM_CHAINS, disconnectEvm, formatUnits, getBalance, isEvmAddress, parseUnits, sendDeposit, shortAddress, switchChain } from "../lib/evm.js";
 import { getNearBalance, nearExplorerTx, restoreNear, sendNearDeposit, signOutNear } from "../lib/near.js";
@@ -75,6 +76,7 @@ export default function LivePage() {
   const [holdings, setHoldings] = useState(new Map());
   const [holdingsLoading, setHoldingsLoading] = useState(false);
   const [histKey, setHistKey] = useState(0);
+  const [showStatus, setShowStatus] = useState(false);
   const pollRef = useRef(null);
   const holdingsRun = useRef({ key: "", ctl: null });
   const seq = useRef(0);
@@ -115,7 +117,7 @@ export default function LivePage() {
 
   useEffect(() => {
     getTokens().then(setTokens).catch((e) => setTokenError(e.message));
-    return () => window.clearInterval(pollRef.current);
+    return () => window.clearTimeout(pollRef.current);
   }, []);
 
   // Sensible defaults whenever the token list or the connected wallet type changes.
@@ -206,7 +208,7 @@ export default function LivePage() {
     if (!chosen) return;
     const route = ROUTE_CHOICES.find((r) => r.id === routeId);
     try {
-      setBusy(true);
+      setBusy(true); setShowStatus(true);
       const res = await requestQuote({ dry: false, originAsset: from.assetId, destinationAsset: to.assetId, amount: raw.toString(), recipient, refundTo: wallet.address, slippageBps: route.slippage });
       const q = res.quote;
       if (!q?.depositAddress) throw new Error("The service did not return a deposit address. Nothing was sent.");
@@ -214,27 +216,34 @@ export default function LivePage() {
       let hash;
       if (kind === "near") hash = await sendNearDeposit(wallet.wallet, { depositAddress: q.depositAddress, token: from, amount: sendAmount });
       else {
-        await switchChain(wallet.provider, EVM_CHAINS[from.blockchain]);
+        // Only ask the wallet to switch networks when it isn't already on the right one (saves a prompt and a round trip).
+        const want = EVM_CHAINS[from.blockchain];
+        const have = await wallet.provider.request({ method: "eth_chainId" }).catch(() => null);
+        if (!have || parseInt(have, 16) !== want.id) await switchChain(wallet.provider, want);
         hash = await sendDeposit(wallet.provider, { from: wallet.address, to: q.depositAddress, token: from, amount: sendAmount });
       }
       setTx({ hash, status: "PENDING_DEPOSIT" });
       fetch("/api/recent", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ depositAddress: q.depositAddress, wallet: wallet.address, fromSymbol: from.symbol, toSymbol: to.symbol, amountIn: amount, amountOut: q.amountOutFormatted ? String(q.amountOutFormatted) : "" }) }).then(() => setHistKey((n) => n + 1)).catch(() => {});
       submitDeposit(hash, q.depositAddress).catch(() => {});
-      window.clearInterval(pollRef.current);
-      pollRef.current = window.setInterval(async () => {
+      // Poll quickly (about every 1.5s) and check straight away, so each step shows as soon as it happens.
+      window.clearTimeout(pollRef.current);
+      const poll = async () => {
         try {
-          const s = await getStatus(q.depositAddress);
-          setTx((prev) => prev && { ...prev, status: s.status });
-          if (TERMINAL_STATUSES.includes(s.status)) window.clearInterval(pollRef.current);
+          const st = await getStatus(q.depositAddress);
+          setTx((prev) => prev && { ...prev, status: st.status });
+          if (TERMINAL_STATUSES.includes(st.status)) { setHistKey((n) => n + 1); return; }
         } catch { /* keep polling */ }
-      }, 5000);
+        pollRef.current = window.setTimeout(poll, 1500);
+      };
+      poll();
     } catch (e) {
+      setShowStatus(false);
       setError(e?.code === 4001 ? "You rejected the transaction in your wallet. Nothing was sent." : (e?.message || "Something went wrong. Nothing was sent."));
     } finally { setBusy(false); }
   };
 
   const txUrl = (hash) => (kind === "near" ? nearExplorerTx(hash) : `${EVM_CHAINS[from?.blockchain]?.explorer}/tx/${hash}`);
-  const reset = () => { setTx(null); setAmount(""); };
+  const reset = () => { window.clearTimeout(pollRef.current); setTx(null); setAmount(""); setShowStatus(false); };
   const done = tx && TERMINAL_STATUSES.includes(tx.status);
 
   let cta;
@@ -309,10 +318,9 @@ export default function LivePage() {
       {chosen && !tx && <p className="live-risk"><ShieldWarning size={15} aria-hidden="true"/> This sends real funds. Check the recipient above. If the swap can’t complete, funds are refunded to your connected address.</p>}
       {!tx && <button type="button" className="button button-primary lv-cta" disabled={cta.disabled} onClick={cta.onClick}>{cta.spin && <CircleNotch className="spin" size={16} aria-hidden="true"/>} {cta.label} {cta.go && <ArrowRight size={16} aria-hidden="true"/>}</button>}
 
-      {tx && <div className="demo-result live-result" role="status"><span>{done ? <Check size={16} aria-hidden="true"/> : <CircleNotch className="spin" size={16} aria-hidden="true"/>}</span><div><b>{STATUS_COPY[tx.status] || tx.status}</b>
-        <small>Transaction {short(tx.hash)}{tx.hash && <> · <a href={txUrl(tx.hash)} target="_blank" rel="noreferrer">View on explorer</a></>}</small>
-        {done && <button type="button" className="live-again" onClick={reset}>Start another swap</button>}</div></div>}
+      {tx && !showStatus && <button type="button" className="live-pill" onClick={() => setShowStatus(true)}>{done ? <Check size={14} aria-hidden="true"/> : <CircleNotch className="spin" size={14} aria-hidden="true"/>} {STATUS_COPY[tx.status] || tx.status} <span>View</span></button>}
     </main>
+    <SwapStatusModal open={showStatus && (busy || !!tx)} onClose={() => setShowStatus(false)} tx={tx} summary={<>{amount} {from?.symbol} <ArrowRight size={12} aria-hidden="true"/> {chosen ? `~${chosen.amountOutFormatted} ` : ""}{to?.symbol}</>} explorerUrl={tx?.hash ? txUrl(tx.hash) : ""} onAgain={reset}/>
     <WalletModal open={modalOpen} onClose={() => setModalOpen(false)} onConnected={onConnected}/>
   </div>;
 }

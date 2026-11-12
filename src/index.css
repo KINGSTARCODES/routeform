@@ -559,3 +559,25 @@ body{font-size:16px}
 .lv-chip.ok{background:rgba(68,199,176,.12);color:#8ed9bd}
 .lv-chip.bad{background:rgba(240,160,120,.12);color:#f0b08a}
 .lv-recent-note{margin:8px 0 0;color:#7a908e;font-size:11px;line-height:1.5}
+
+/* Swap status popup (blurred backdrop comes from Tray; bottom sheet on mobile) */
+.swap-status-tray{max-width:460px}
+.ss-summary{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:-4px 0 14px;color:#b9cbc9;font-size:14px}
+.ss-live{display:inline-flex;align-items:center;gap:6px;margin-left:auto;padding:4px 9px;border-radius:999px;background:rgba(68,199,176,.1);color:#8ed9bd;font:10px var(--font-mono);letter-spacing:.8px;text-transform:uppercase}
+.ss-live i{width:6px;height:6px;border-radius:50%;background:#7ad8ba;box-shadow:0 0 9px #65c9ab;animation:ssPulse 1.2s ease-in-out infinite}
+@keyframes ssPulse{50%{opacity:.35}}
+.ss-timeline{margin:6px 0 4px}
+.ss-timeline .timeline-item{grid-template-columns:24px minmax(0,1fr) auto;gap:12px;min-height:62px}
+.ss-timeline .timeline-item b{font-size:14px;line-height:1.35}
+.ss-timeline .timeline-item small{font-size:12px;margin-top:3px}
+.ss-timeline .timeline-item time{font-size:10px;letter-spacing:.6px;white-space:nowrap;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.04)}
+.ss-timeline .timeline-item.active time{background:rgba(68,199,176,.1)}
+.ss-timeline .timeline-item.fail .timeline-dot{color:#f0b08a;border-color:rgba(240,160,120,.4);background:#2a1f1a}
+.ss-timeline .timeline-item.fail time{color:#f0b08a;background:rgba(240,160,120,.12)}
+.ss-note{margin:10px 0 0;color:#8ca8a3;font-size:12px;line-height:1.55}
+.ss-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}
+.ss-actions .tray-action{width:auto;flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.ss-link{display:inline-flex;align-items:center;gap:6px;color:#9be1c9;font-size:13px;white-space:nowrap}
+.ss-close{margin-left:auto;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:none;color:#d2dfde;font-size:13px;cursor:pointer}
+.live-pill{display:flex;align-items:center;gap:8px;width:100%;margin-top:14px;padding:12px 14px;border:1px solid rgba(68,199,176,.25);border-radius:12px;background:rgba(68,199,176,.07);color:#cfe9e2;font-size:13px;cursor:pointer;text-align:left}
+.live-pill span{margin-left:auto;color:#9be1c9}
