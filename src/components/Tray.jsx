@@ -25,6 +25,10 @@ export default function Tray({ open, title, onClose, onBack, className = "", chi
   const hidden = reduce ? { opacity: 0 } : mobile ? { y: "100%", opacity: 1 } : { y: 24, opacity: 0, scale: 0.98 };
   const dialogRef = useRef(null);
   const returnFocusRef = useRef(null);
+  // Keep the latest onClose without re-running the effect below: an inline onClose changes on every
+  // parent render (e.g. each keystroke in a search box), which would steal focus and close the keyboard.
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!open) return;
@@ -33,7 +37,7 @@ export default function Tray({ open, title, onClose, onBack, className = "", chi
     document.body.style.overflow = "hidden";
 
     const onKey = (e) => {
-      if (e.key === "Escape") { onClose(); return; }
+      if (e.key === "Escape") { onCloseRef.current(); return; }
       if (e.key !== "Tab" || !dialogRef.current) return;
       const items = Array.from(dialogRef.current.querySelectorAll(FOCUSABLE)).filter((el) => !el.disabled);
       if (items.length === 0) return;
@@ -56,7 +60,7 @@ export default function Tray({ open, title, onClose, onBack, className = "", chi
       window.cancelAnimationFrame(raf);
       returnFocusRef.current?.focus?.();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   // Portal to <body>: ancestors with backdrop-filter/transform (the sticky header) would otherwise trap position:fixed.
   return createPortal(
