@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, ArrowSquareOut, CircleNotch } from "@phosphor-icons/react";
-import { getStatus, TERMINAL_STATUSES } from "../lib/oneclick.js";
-import { clearHistory, loadHistory, updateSwap } from "../lib/history.js";
 
 const LABEL = {
   PENDING_DEPOSIT: ["Waiting for deposit", "wait"],
@@ -20,46 +18,33 @@ const ago = (t) => {
   return h < 24 ? `${h} h ago` : new Date(t).toLocaleDateString();
 };
 
-// Lists this wallet's recent swaps and re-checks any that are not finished, so a swap you left mid-way still shows its real result.
-export default function RecentSwaps({ wallet, refreshKey }) {
-  const [items, setItems] = useState(() => loadHistory());
-  const [, tick] = useState(0);
-  const busy = useRef(false);
-  const mine = items.filter((e) => e.wallet === wallet);
-
-  useEffect(() => { setItems(loadHistory()); }, [refreshKey, wallet]);
-
+// Public feed of recent Routeform swaps. Read-only: nobody can edit or clear it from the site.
+export default function RecentSwaps({ refreshKey }) {
+  const [items, setItems] = useState(null);
   useEffect(() => {
-    if (!wallet) return undefined;
     let stop = false;
-    const refresh = async () => {
-      if (busy.current) return;
-      busy.current = true;
+    const load = async () => {
       try {
-        for (const e of loadHistory().filter((x) => x.wallet === wallet && !TERMINAL_STATUSES.includes(x.status))) {
-          try {
-            const s = await getStatus(e.depositAddress);
-            if (s?.status && s.status !== e.status && !stop) setItems(updateSwap(e.depositAddress, { status: s.status }));
-          } catch { /* try again next round */ }
-        }
-      } finally { busy.current = false; }
-      if (!stop) tick((n) => n + 1);
+        const r = await fetch("/api/recent");
+        const j = await r.json();
+        if (!stop) setItems(j.configured === false ? [] : j.items || []);
+      } catch { if (!stop) setItems((v) => v ?? []); }
     };
-    refresh();
-    const id = window.setInterval(refresh, 15000);
+    load();
+    const id = window.setInterval(load, 20000);
     return () => { stop = true; window.clearInterval(id); };
-  }, [wallet, refreshKey]);
+  }, [refreshKey]);
 
-  if (!wallet || mine.length === 0) return null;
+  if (!items || items.length === 0) return null;
   return <section className="lv-recent" aria-label="Recent swaps">
-    <div className="lv-recent-head"><h2>Recent swaps</h2><button type="button" onClick={() => { clearHistory(wallet); setItems(loadHistory()); }}>Clear</button></div>
-    <ul>{mine.slice(0, 8).map((e) => {
+    <div className="lv-recent-head"><h2>Recent swaps</h2><span className="lv-recent-live">Public</span></div>
+    <ul>{items.slice(0, 10).map((e) => {
       const [text, tone] = LABEL[e.status] || [e.status, "wait"];
-      return <li key={e.depositAddress}>
-        <div className="lv-recent-main"><b>{e.amountIn} {e.fromSymbol} <ArrowRight size={12} aria-hidden="true"/> {e.amountOut ? `~${e.amountOut} ` : ""}{e.toSymbol}</b><small>{ago(e.createdAt)}{e.explorerUrl && <> · <a href={e.explorerUrl} target="_blank" rel="noreferrer">Deposit tx <ArrowSquareOut size={11} aria-hidden="true"/></a></>}</small></div>
+      return <li key={e.id}>
+        <div className="lv-recent-main"><b>{e.amountIn} {e.fromSymbol} <ArrowRight size={12} aria-hidden="true"/> {e.amountOut ? `~${e.amountOut} ` : ""}{e.toSymbol}</b><small>{e.wallet && <>{e.wallet} · </>}{ago(e.createdAt)} · <a href={`https://explorer.near-intents.org/transactions/${encodeURIComponent(e.id)}`} target="_blank" rel="noreferrer">Details <ArrowSquareOut size={11} aria-hidden="true"/></a></small></div>
         <span className={`lv-chip ${tone}`}>{tone === "wait" && <CircleNotch className="spin" size={11} aria-hidden="true"/>}{text}</span>
       </li>;
     })}</ul>
-    <p className="lv-recent-note">Saved in this browser only. Delivered means the funds reached the recipient address.</p>
+    <p className="lv-recent-note">Swaps made through Routeform, visible to everyone. Wallets are shortened. Nothing here can be cleared.</p>
   </section>;
 }

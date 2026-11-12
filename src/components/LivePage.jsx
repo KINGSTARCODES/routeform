@@ -5,7 +5,6 @@ import TokenPicker from "./TokenPicker.jsx";
 import WalletModal from "./WalletModal.jsx";
 import { chainLabel } from "../lib/chains.js";
 import RecentSwaps from "./RecentSwaps.jsx";
-import { addSwap, updateSwap } from "../lib/history.js";
 import { getStatus, getTokens, requestQuote, submitDeposit, TERMINAL_STATUSES } from "../lib/oneclick.js";
 import { EVM_CHAINS, disconnectEvm, formatUnits, getBalance, isEvmAddress, parseUnits, sendDeposit, shortAddress, switchChain } from "../lib/evm.js";
 import { getNearBalance, nearExplorerTx, restoreNear, sendNearDeposit, signOutNear } from "../lib/near.js";
@@ -219,15 +218,13 @@ export default function LivePage() {
         hash = await sendDeposit(wallet.provider, { from: wallet.address, to: q.depositAddress, token: from, amount: sendAmount });
       }
       setTx({ hash, status: "PENDING_DEPOSIT" });
-      addSwap({ depositAddress: q.depositAddress, wallet: wallet.address, hash, fromSymbol: from.symbol, toSymbol: to.symbol, amountIn: amount, amountOut: q.amountOutFormatted ? String(q.amountOutFormatted) : "", explorerUrl: txUrl(hash), recipient });
-      setHistKey((n) => n + 1);
+      fetch("/api/recent", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ depositAddress: q.depositAddress, wallet: wallet.address, fromSymbol: from.symbol, toSymbol: to.symbol, amountIn: amount, amountOut: q.amountOutFormatted ? String(q.amountOutFormatted) : "" }) }).then(() => setHistKey((n) => n + 1)).catch(() => {});
       submitDeposit(hash, q.depositAddress).catch(() => {});
       window.clearInterval(pollRef.current);
       pollRef.current = window.setInterval(async () => {
         try {
           const s = await getStatus(q.depositAddress);
           setTx((prev) => prev && { ...prev, status: s.status });
-          updateSwap(q.depositAddress, { status: s.status }); setHistKey((n) => n + 1);
           if (TERMINAL_STATUSES.includes(s.status)) window.clearInterval(pollRef.current);
         } catch { /* keep polling */ }
       }, 5000);
@@ -315,7 +312,7 @@ export default function LivePage() {
       {tx && <div className="demo-result live-result" role="status"><span>{done ? <Check size={16} aria-hidden="true"/> : <CircleNotch className="spin" size={16} aria-hidden="true"/>}</span><div><b>{STATUS_COPY[tx.status] || tx.status}</b>
         <small>Transaction {short(tx.hash)}{tx.hash && <> · <a href={txUrl(tx.hash)} target="_blank" rel="noreferrer">View on explorer</a></>}</small>
         {done && <button type="button" className="live-again" onClick={reset}>Start another swap</button>}</div></div>}
-      <RecentSwaps wallet={wallet?.address} refreshKey={histKey}/>
+      <RecentSwaps refreshKey={histKey}/>
     </main>
     <WalletModal open={modalOpen} onClose={() => setModalOpen(false)} onConnected={onConnected}/>
   </div>;
