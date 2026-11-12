@@ -14,6 +14,7 @@ import OutcomeInput from "./components/OutcomeInput.jsx";
 import LegalPage from "./components/LegalPage.jsx";
 import LogoMark, { RLogoMark } from "./components/LogoMark.jsx";
 import BrandIcon from "./components/BrandIcon.jsx";
+import { TokenIcon } from "./components/NetIcon.jsx";
 
 const SIGNATURE_SPRING = { type: "spring", damping: 28, stiffness: 260 };
 const KNOWN_CHAINS = ["Arbitrum", "Optimism", "Ethereum", "NEAR", "Base"];
@@ -57,11 +58,11 @@ function RoutePreview({ route, outcome }) {
 // Supported networks revolve around the Routeform mark: two counter-rotating rings.
 const NET_ICON = (slug) => `/icons/networks/${slug}.svg`;
 const ORBIT_INNER = [{ n: "NEAR" }, { n: "Ethereum", b: "ethereum" }, { n: "Arbitrum", b: "arbitrum" }, { n: "Base", b: "base" }];
-const ORBIT_OUTER = [{ n: "Optimism", b: "optimism" }, { n: "Polygon", s: "polygon" }, { n: "BNB Chain", s: "binance-smart-chain" }, { n: "Avalanche", s: "avalanche" }, { n: "Solana", s: "solana" }];
+const ORBIT_OUTER = [{ n: "Optimism", b: "optimism" }, { n: "Polygon", s: "polygon" }, { n: "BNB Chain", s: "binance-smart-chain" }, { n: "Avalanche", s: "avalanche" }, { n: "USDC", t: true }];
 function OrbitRing({ nodes, className, offset = 0, size = 30 }) {
   return <div className={`orb-ring ${className}`}>{nodes.map((node, i) => {
     const a = (offset + (360 / nodes.length) * i) * (Math.PI / 180);
-    return <span className="orb-node orb-ring-node" key={node.n} style={{ left: `${50 + 50 * Math.cos(a)}%`, top: `${50 + 50 * Math.sin(a)}%` }} title={node.n}><span className="orb-node-inner">{node.b ? <BrandIcon icon={node.b} size={size}/> : node.s ? <img src={NET_ICON(node.s)} width={size} height={size} style={{ display: "block", width: size, height: size, borderRadius: "50%", objectFit: "contain" }} alt="" aria-hidden="true"/> : <LogoMark size={size - 4}/>}</span></span>;
+    return <span className="orb-node orb-ring-node" key={node.n} style={{ left: `${50 + 50 * Math.cos(a)}%`, top: `${50 + 50 * Math.sin(a)}%` }} title={node.n}><span className="orb-node-inner">{node.t ? <span style={{ display: "block", width: size, height: size, borderRadius: "50%", overflow: "hidden" }}><TokenIcon symbol="USDC"/></span> : node.b ? <BrandIcon icon={node.b} size={size}/> : node.s ? <img src={NET_ICON(node.s)} width={size} height={size} style={{ display: "block", width: size, height: size, borderRadius: "50%", objectFit: "contain" }} alt="" aria-hidden="true"/> : <LogoMark size={size - 4}/>}</span></span>;
   })}</div>;
 }
 function NetworkOrb() {
