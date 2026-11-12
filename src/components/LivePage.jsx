@@ -249,7 +249,7 @@ export default function LivePage() {
 
   return <div className="product-shell live-shell">
     <div className="live-banner" role="note"><ShieldWarning size={15} aria-hidden="true"/> Live · real funds. Transactions are final once sent.</div>
-    <header className="site-header"><div className="nav-wrap"><Brand href="/"/><div className="lv-nav"><a href="/" className="lv-link-nav">Home</a><a href="/product" className="lv-link-nav">Demo</a>
+    <header className="site-header"><div className="nav-wrap"><Brand href="/"/><div className="lv-nav"><a href="/" className="lv-link-nav">Home</a><a href="/product" className="lv-link-nav">Demo</a><RecentSwaps refreshKey={histKey}/>
       <WalletMenu wallet={wallet} balance={balance !== null && from ? { amount: `${formatUnits(balance, from.decimals)} ${from.symbol}`, network: `on ${chainLabel(from.blockchain)}` } : null} onConnect={() => setModalOpen(true)} onChange={() => setModalOpen(true)} onDisconnect={disconnect}/></div></div></header>
 
     <main className="lv-main">
@@ -312,7 +312,6 @@ export default function LivePage() {
       {tx && <div className="demo-result live-result" role="status"><span>{done ? <Check size={16} aria-hidden="true"/> : <CircleNotch className="spin" size={16} aria-hidden="true"/>}</span><div><b>{STATUS_COPY[tx.status] || tx.status}</b>
         <small>Transaction {short(tx.hash)}{tx.hash && <> · <a href={txUrl(tx.hash)} target="_blank" rel="noreferrer">View on explorer</a></>}</small>
         {done && <button type="button" className="live-again" onClick={reset}>Start another swap</button>}</div></div>}
-      <RecentSwaps refreshKey={histKey}/>
     </main>
     <WalletModal open={modalOpen} onClose={() => setModalOpen(false)} onConnected={onConnected}/>
   </div>;

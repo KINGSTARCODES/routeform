@@ -539,7 +539,12 @@ body{font-size:16px}
 }
 
 /* Recent swaps */
-.lv-recent{margin-top:28px;padding:18px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
+.lv-recent-wrap{position:relative}
+.lv-recent-btn{display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 12px;border:0;border-radius:999px;background:transparent;color:rgba(255,255,255,.8);font:500 14px/1 inherit;cursor:pointer}
+.lv-recent-btn:hover,.lv-recent-btn[aria-expanded=true]{color:#fff;background:rgba(255,255,255,.07)}
+.lv-recent-btn:focus-visible{outline:2px solid #7dffc8;outline-offset:2px}
+.lv-recent{position:absolute;right:0;top:calc(100% + 8px);width:min(420px,calc(100vw - 28px));max-height:min(70vh,520px);overflow:auto;padding:16px 18px;border:1px solid rgba(194,225,226,.18);border-radius:14px;background:#0e1a21;box-shadow:0 18px 50px rgba(0,0,0,.5);z-index:60}
+@media(max-width:620px){.lv-recent-label{display:none}.lv-recent-btn{width:40px;padding:0;justify-content:center}.lv-recent-wrap{position:static}.lv-recent{position:fixed;left:14px;right:14px;top:72px;width:auto}}
 .lv-recent-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .lv-recent-head h2{font:500 16px var(--font-display);margin:0}
 .lv-recent-live{font:10px var(--font-mono);letter-spacing:1px;color:#8ed9bd;text-transform:uppercase}
