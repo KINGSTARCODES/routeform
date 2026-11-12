@@ -498,3 +498,23 @@ body{font-size:16px}
 .lv-menu-info{display:grid;gap:3px;padding:10px 12px 12px;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,.1)}
 .lv-menu-info small{font-size:12px;color:rgba(255,255,255,.55)}
 .lv-menu-info b{font-size:18px;overflow-wrap:anywhere}
+
+/* ---- Multichain stack, balances in picker ---- */
+.chain-stack{display:inline-flex;align-items:center;flex:none}
+.chain-stack-item{width:var(--cs,18px);height:var(--cs,18px);margin-left:calc(var(--cs,18px) * -.32);display:grid;place-items:center;border-radius:50%;overflow:hidden;background:#0b1217;border:2px solid #0b1217;font-size:9px;font-weight:700;color:#fff;box-sizing:content-box}
+.chain-stack-item:first-child{margin-left:0}
+.chain-stack-item .net-icon{width:100%;height:100%}
+.tp-chips .tp-all{padding-left:10px}
+.tp-bal{margin-left:auto;font:600 14px/1 ui-monospace,SFMono-Regular,monospace;color:#7dffc8;white-space:nowrap}
+.tp-note{margin:10px 2px;font-size:13px;color:rgba(255,255,255,.55)}
+
+/* ---- Outcome suggestions ---- */
+.outcome-input{position:relative}
+.outcome-suggest{position:absolute;z-index:30;left:0;right:0;top:calc(100% + 8px);margin:0;padding:6px;list-style:none;border-radius:16px;border:1px solid rgba(194,225,226,.2);background:#0d1a20;box-shadow:0 20px 50px rgba(0,0,0,.5);max-height:min(320px,50vh);overflow-y:auto}
+.outcome-suggest li{display:flex;align-items:center;gap:12px;min-height:48px;padding:6px 10px;border-radius:12px;cursor:pointer;color:rgba(255,255,255,.85);font-size:15px}
+.outcome-suggest li.on,.outcome-suggest li:hover{background:rgba(255,255,255,.08)}
+.outcome-suggest b{color:#fff}
+.os-icon{position:relative;flex:none;width:30px;height:30px;display:block}
+.os-token{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:#26323c;color:#fff;font-weight:700;font-size:13px;overflow:hidden}
+.os-chain{position:absolute;right:-4px;bottom:-4px;width:15px;height:15px;display:grid;place-items:center;border-radius:50%;background:#0b1217;border:2px solid #0b1217;overflow:hidden;font-size:8px;color:#fff;box-sizing:content-box}
+.os-token .net-icon,.os-chain .net-icon{width:100%;height:100%}

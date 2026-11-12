@@ -1,4 +1,4 @@
-// Official network, token and wallet marks (see src/assets/icons/README.md for provenance and usage notes).
+// Official network, token and wallet marks.
 import usdc from "../assets/icons/usdc.svg";
 import usdt from "../assets/icons/usdt.svg";
 import eth from "../assets/icons/eth.svg";

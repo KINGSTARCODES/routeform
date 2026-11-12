@@ -8,6 +8,7 @@ import { getStatus, getTokens, requestQuote, submitDeposit, TERMINAL_STATUSES } 
 import { EVM_CHAINS, disconnectEvm, formatUnits, getBalance, isEvmAddress, parseUnits, sendDeposit, shortAddress, switchChain } from "../lib/evm.js";
 import { getNearBalance, nearExplorerTx, restoreNear, sendNearDeposit, signOutNear } from "../lib/near.js";
 import { discoverWallets } from "../lib/evm.js";
+import { fetchBalances } from "../lib/balances.js";
 import { clearLiveSession, loadLiveSession, saveLiveSession } from "../lib/liveSession.js";
 
 const short = (a = "") => (a.startsWith("0x") ? shortAddress(a) : a.length > 22 ? `${a.slice(0, 10)}…${a.slice(-8)}` : a);
@@ -70,7 +71,10 @@ export default function LivePage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [tx, setTx] = useState(null); // { hash, status }
+  const [holdings, setHoldings] = useState(new Map());
+  const [holdingsLoading, setHoldingsLoading] = useState(false);
   const pollRef = useRef(null);
+  const holdingsRun = useRef({ key: "", ctl: null });
   const seq = useRef(0);
 
   const kind = wallet?.kind || "evm";
@@ -164,6 +168,19 @@ export default function LivePage() {
     return () => window.clearTimeout(timer);
   }, [wallet, from, to, amount, recipient, recipientOk, validAmount, raw]);
 
+  // Balances for every listed asset on the wallet's networks, loaded once the asset picker is opened.
+  const loadHoldings = useCallback(() => {
+    if (!wallet || !tokens.length) return;
+    const key = `${wallet.kind}:${wallet.address}`;
+    if (holdingsRun.current.key === key) return;
+    holdingsRun.current.ctl?.abort();
+    const ctl = new AbortController();
+    holdingsRun.current = { key, ctl };
+    setHoldings(new Map()); setHoldingsLoading(true);
+    fetchBalances({ kind: wallet.kind, address: wallet.address, tokens, signal: ctl.signal, onUpdate: setHoldings }).finally(() => setHoldingsLoading(false));
+  }, [wallet, tokens]);
+  useEffect(() => { holdingsRun.current.ctl?.abort(); holdingsRun.current = { key: "", ctl: null }; setHoldings(new Map()); }, [wallet]);
+
   const onConnected = useCallback((w) => { saveLiveSession(w); setWallet(w); setModalOpen(false); }, []);
   const disconnect = async () => {
     if (wallet?.kind === "near") await signOutNear(wallet.wallet); else if (wallet?.provider) await disconnectEvm(wallet.provider);
@@ -244,7 +261,7 @@ export default function LivePage() {
         <div className="lv-row"><label htmlFor="lv-amount">Sell</label><span className="lv-muted">{balance !== null && from ? `Balance: ${formatUnits(balance, from.decimals)} ${from.symbol}` : " "}</span></div>
         <div className="lv-amount-row">
           <input id="lv-amount" inputMode="decimal" placeholder="0" value={amount} autoComplete="off" onChange={(e) => setAmount(e.target.value)}/>
-          <TokenPicker label="Sell" tokens={sourceTokens} value={fromId} onChange={setFromId}/>
+          <TokenPicker label="Sell" tokens={sourceTokens} value={fromId} onChange={setFromId} balances={holdings} balancesLoading={holdingsLoading} onOpen={loadHoldings}/>
         </div>
         <div className="lv-pcts" role="group" aria-label="Fill from balance">{[[20, "20%"], [50, "50%"], [100, "MAX"]].map(([n, t]) => <button type="button" key={n} onClick={() => setPercent(n)} disabled={balance === null}>{t}</button>)}</div>
       </section>
@@ -255,7 +272,7 @@ export default function LivePage() {
         <div className="lv-row"><span>Buy</span><span className="lv-muted">{chosen?.amountOutUsd ? `≈ $${Number(chosen.amountOutUsd).toFixed(2)}` : " "}</span></div>
         <div className="lv-amount-row">
           <strong className={`lv-out${chosen ? "" : " empty"}`} aria-live="polite">{chosen ? chosen.amountOutFormatted : quoting ? "…" : "0"}</strong>
-          <TokenPicker label="Buy" tokens={tokens} value={toId} onChange={(id) => { setToId(id); setOther(""); }}/>
+          <TokenPicker label="Buy" tokens={tokens} value={toId} onChange={(id) => { setToId(id); setOther(""); }} balances={holdings} balancesLoading={holdingsLoading} onOpen={loadHoldings}/>
         </div>
       </section>
 
